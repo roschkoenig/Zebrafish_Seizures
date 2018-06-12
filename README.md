@@ -12,7 +12,7 @@ The code runs on [Matlab](https://uk.mathworks.com/products/matlab.html) (tested
 
 The analysis is done by way of a number of custom routines, that in conjunction can be used to reproduce the findings from the paper. Below is a summary of what each of the routines does. Broadly, the code is trying to accomplish the following 5 objectives
 
-1. Identify induced network-wide changes in neuronal activity at 'sensor space' - i.e. directly from the meausured signals
+1. Identify induced [network-wide changes](#visualise-sensor-space-changes-of-neuronal-dynamics-using-a-sliding-window) in neuronal activity at 'sensor space' - i.e. directly from the meausured signals
 2. Use simulations to test whether DCM can resurrect neuronal parameters from calcium imaging signals
 3. Use DCM and Bayesian model comparison to identify a parsimonious baseline network architecture
 4. Use a hierarchical DCM to identify slow changes in neuronal parameters induced by the induced seizures 
@@ -42,7 +42,9 @@ The code will then generate a number of time series with a known set of neuronal
 
 ![Several time series with varying parameters](https://gdurl.com/vUlE)
 
-These are then used as the basis to estimate the underlying neuronal parameter changes - thus for each of the (calcium-)time series, we will invert a DCM for cross-spectral densities modelling a single node 
+These are then used as the basis to estimate the underlying neuronal parameter changes. For each of the (calcium-)time series, we will invert a single-node DCM for cross-specrtal densities. Using a Parametric empirical Bayesian appraoch, we will then identify the single parameter diesturbance that best explains the differences between these individual time traces. This will yield both a free energy approximation of the model evidence for any individual parameter to explain the observed effect (top panel of the figure below); and posterior estimates of the parameter change that best explains the transitions between the different time series. In this case, the correct parameter was identified from the PEB analysis (i.e. the one that was manipulated to simulate the original LFP traces).
+
+![Bayesian model comparison and posterior parameter estimates](http://gdurl.com/voEb)
 
 ### Set up and invert baseline DCM 
 ``zf_dcm``
