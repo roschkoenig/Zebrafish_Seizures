@@ -31,6 +31,18 @@ The windowed spectral estimates are also used to estimate a power dynamics corre
 
 ### Simulate dynamic causal modelling on the calcium dynamics 
 ``zf_calciumsim``
+This code illustrates how parameters changes that correspond to underlying synaptic changes can be retrieved from both neurophysiological recordings, and calcium imaging data. For this, we are first simulating some LFP data, and illustrating a convolution with a kernel that resembles the temporal dynamics of a GCaMP6f probe (also used in the experimental paradigm). The results are shown below and will be given as output from this code - they show the LFP, the calcium kernel, and calcium imaging time series both in the temporal domain (left) and in the frequency domain (right). 
+
+Temporal domain   | Frequency domain  
+---               | ---          
+Top to bottom: Calcium kernel; example LFP; convolved calcium time series | Top to bottom: LFP spetral density; Calcium kernel spectral density; resultant calcium time series spectral density 
+![Calcium kernel in the time domain](https://gdurl.com/PVMc) | ![Calcium kernel in the frequency domain](https://gdurl.com/snWb)
+
+The code will then generate a number of time series with a known set of neuronal parameters, where one of the parameters is varied across the different repeated simulations. 
+
+![Several time series with varying parameters](https://gdurl.com/vUlE)
+
+These are then used as the basis to estimate the underlying neuronal parameter changes - thus for each of the (calcium-)time series, we will invert a DCM for cross-spectral densities modelling a single node 
 
 ### Set up and invert baseline DCM 
 ``zf_dcm``
