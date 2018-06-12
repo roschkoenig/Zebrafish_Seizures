@@ -43,14 +43,27 @@ end
 
 % Define scaling factor to represent covariance of the estimates
 %--------------------------------------------------------------------------
+allcvs = [cv{:}];
 for di = 1:length(d{dd})
-    ci      = ceil((cv{dd}(di) - min(cv{dd}))/(range(cv{dd})) * 60)+1;
+    ci      = ceil((cv{dd}(di) - min(cv{dd}))/(range(cv{dd})) * 70)+1;
     a(di) 	= 101 - ci;
 end
 
+% Define bar length of individual confidence intervals
+%--------------------------------------------------------------------------
+% for di = 1:length(d{dd})
+%     conf    = spm_invNcdf(1-.1); 
+%     c(di)   = conf*sqrt(cv{dd}(di));
+% end
+
 % Plot
 %==========================================================================
-scatter(o, d{dd}, a * scl, cols, 'filled'); hold on;
+% for di = 1:length(d{dd})
+%     up = exp(log(d{dd}(di)) + c(di));
+%     lo = exp(log(d{dd}(di)) - c(di));
+%     plot([o(di) o(di)], [lo up], 'color', cols(di,:)); hold on
+% end
+scatter(o, d{dd}, a, cols, 'filled'); hold on;
 xlim([0, length(d)+1]);
 
 % Estimate Bayesian parameter averages if indicated

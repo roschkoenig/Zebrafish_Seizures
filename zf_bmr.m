@@ -60,7 +60,7 @@ for m = 1:length(Amod)
     mlab{m} = Amod{m}.name;
 end
 
-% Family wise comparison - draw figures
+%% Family wise comparison - draw figures
 %==========================================================================
 % Define families
 %--------------------------------------------------------------------------
@@ -83,7 +83,7 @@ subplot(2,1,2),
     set(gca, 'XTickLabel', {'None', 'Tec', 'Cbl', 'RHb', 'CHb', 'RSC'});
     
     % Settings
-    axis square
+%     axis square
     box off
     
 % Plot Hub connection BMC
@@ -99,6 +99,6 @@ subplot(2,1,1),
     set(gca, 'XTickLabel', {'None', 'Homol.', 'Neigh.', 'Both'})
     
     % Settings
-    axis square
+%     axis square
     box off
     

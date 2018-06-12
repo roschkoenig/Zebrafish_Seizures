@@ -61,9 +61,9 @@ ay = abs(y);
 for i = 1:8, ty(:,:,i) = squeeze(ay(:,:,i,i)); end
 my = squeeze(mean(ty,3));
 
-% Set up plotting variables
+%% Set up plotting variables
 %--------------------------------------------------------------------------
-cls = flip(cbrewer('div', 'Spectral', 100));
+cls = flip(cbrewer('seq', 'YlGnBu', 100));
 colormap(cls);
 set(gcf, 'Color', 'w');
 tim_ax = linspace(1, length(Z)/Fs/60, length(Z));
@@ -74,14 +74,14 @@ plrange = [-4.5 2.5];
 
 % Plot Mode 5
 %--------------------------------------------------------------------------
-subplot(5,1,1), imagesc(stp_ax, frq_ax, log(ty(:,:,md(1)))', plrange)
+subplot(6,1,1), imagesc(stp_ax, frq_ax, log(ty(:,:,md(1)))', plrange)
     set(gca, 'xtick', []);
     set(gca, 'ydir', 'normal');
     box off
     set(gca, 'tickdir', 'out')
     title('Example Mode 1: Observed', 'fontsize', 12, 'fontweight', 'bold')
 
-subplot(5,1,2), imagesc(stp_ax, frq_ax, log(tHc(:,:,md(1)))', plrange);
+subplot(6,1,2), imagesc(stp_ax, frq_ax, log(tHc(:,:,md(1)))', plrange);
     set(gca, 'xtick', []);
     set(gca, 'ydir', 'normal');
     box off
@@ -90,26 +90,31 @@ subplot(5,1,2), imagesc(stp_ax, frq_ax, log(tHc(:,:,md(1)))', plrange);
 
 % Plot Time Series
 %--------------------------------------------------------------------------
-subplot(5,1,3), 
+subplot(6,1,3), 
     plot((Z(:,6)), 'Color', [0.3 0.3 0.3]);
     axis off;
 
 % Plot Mode 1
 %--------------------------------------------------------------------------
-subplot(5,1,4), imagesc(stp_ax, frq_ax, log(ty(:,:,md(2)))', plrange)
+subplot(6,1,4), imagesc(stp_ax, frq_ax, log(ty(:,:,md(2)))', plrange)
     set(gca, 'ydir', 'normal');
     set(gca, 'xtick', []);
     box off
     set(gca, 'tickdir', 'out')
     title('Example Mode 2: Observed', 'fontsize', 12, 'fontweight', 'bold')
     
-subplot(5,1,5), imagesc(stp_ax, frq_ax, log(tHc(:,:,md(2)))', plrange);
+subplot(6,1,5), imagesc(stp_ax, frq_ax, log(tHc(:,:,md(2)))', plrange);
     set(gca, 'ydir', 'normal');
     box off
     set(gca, 'tickdir', 'out')
     xlabel('time [min]');
     title('Example Mode 2: Predicted', 'fontsize', 12, 'fontweight', 'bold')
 
+prd = squeeze(mean(log(aHc(:,:,:,:))));   prd = prd(:);
+obs = squeeze(mean(log(ay(:,:,:,:))));    obs = obs(:);
+
+t = table(prd, obs, 'variablenames', {'prd', 'obs'});
+lm = fitlm(t, 'linear')
 
 %% Code Grave
 

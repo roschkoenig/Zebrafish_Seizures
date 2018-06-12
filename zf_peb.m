@@ -104,8 +104,7 @@ M.X         = X;
 M.Xnames    = Xnames;
 
 imagesc(X);
-
-% [PEB RCM]     = spm_dcm_peb(DCM, M, {'H', 'T', 'A'});
+[PEB RCM] = spm_dcm_peb(DCM, M, {'A', 'H', 'T'});
 
 %% Create reduced model space at second level
 %==========================================================================
@@ -163,6 +162,7 @@ Hub{4} = Amod{1}.A;                             % forward and backward
 % Assemble into 4 * 4 = 32 model space
 %--------------------------------------------------------------------------
 count = 0;
+h     = 1;
 for n = 1:length(Nei)
 for b = 1:length(Hub)
     count = count+1;
@@ -196,7 +196,7 @@ for tw = 1:length(DCM)
     end
 end
 
-%% Run PEB for Extrinsic Connections
+% Run PEB for Extrinsic Connections
 %--------------------------------------------------------------------------
 PMA     = spm_dcm_peb_bmc(PEB, MOD(1,:));
 
@@ -272,7 +272,7 @@ end
 %--------------------------------------------------------------------------
 [PMA]   = spm_dcm_peb_bmc(PEB, MOD(1,:));
 
-%% Family Wise Comparison - Intrinsic Connections
+% Family Wise Comparison - Intrinsic Connections
 %==========================================================================
 clear t ti 
 F   = sum(PMA.F,2);
@@ -304,7 +304,7 @@ M.Xnames    = Xnames;
 Fhub        = { 'A{1}(1,3)', 'A{1}(1,4)', 'A{1}(1,5)', 'A{1}(1,6)', 'A{1}(1,7)', 'A{1}(1,8)', 'A{1}(1,9)', 'A{1}(1,10)', ...
                 'A{1}(2,4)', 'A{1}(2,5)', 'A{1}(2,6)', 'A{1}(2,7)', 'A{1}(2,8)', 'A{1}(2,9)', 'A{1}(2,10)'};
 
-[PEB, RCM]  = spm_dcm_peb(DCM, M, {'H', 'T'});
+[PEB, RCM]  = spm_dcm_peb(DCM, M, {'H', 'T', Fhub{:}});
 [PMA]       = spm_dcm_peb_bmc(PEB);
 
 %% Extract and plot Parameters
@@ -327,8 +327,8 @@ end
 %% Define time window to plot
 %--------------------------------------------------------------------------
 clear xEp xCp Te Ti He Hi Aa Ep Cp c d 
+X         = PEB.M.X;
 [val loc] = max(diff(PEB.M.X(:,2)));      % Maximum acute effect
-% loc       = fix(ldcm * 3/4);        % Prolonged seizure
 
 G         = PEB;
 for i = 1:2

@@ -46,8 +46,8 @@ T = find(T);    H = find(H);
 colblock = flip(cbrewer('div', 'Spectral', Nw/3));
 cols     = [colblock; colblock; colblock];
 
-[Tcf Tsc]     = pca(Ep(:,T), 'Algorithm', 'eig');
-[Hcf Hsc]     = pca(Ep(:,H), 'Algorithm', 'eig');
+[Tcf Tsc Tlat Tt2 Texp]     = pca(Ep(:,T), 'Algorithm', 'eig');
+[Hcf Hsc Hlat Ht2 Hexp]     = pca(Ep(:,H), 'Algorithm', 'eig');
 
 clear CA
 
@@ -57,6 +57,12 @@ CA.Tsc      = Tsc;          CA.Hsc      = Hsc;
 scatter(Tsc(:,1), Hsc(:,1), 80, cols, 'filled')
 xlabel('T component');
 ylabel('H component');
+
+figure
+scatter3(Tsc(:,1), Hsc(:,1), Hsc(:,2), 80, cols, 'filled');
+xlabel('First component of time constants');
+ylabel('First component of connectivity parameters');
+zlabel('Second component of connectivity parameters');
 
 %%
 % 
@@ -213,7 +219,7 @@ Np  = length(PEB.Pnames);
 % T   = find(T); 
 % H   = find(H);
 
-% Sp  = pE;
+Sp  = pE;
 Sp.T    = Ep(T)';
 Sp.H    = Ep(H)';
 
@@ -245,7 +251,7 @@ end
 %%
 for d1 = 1:size(dim1,2)-1
 for d2 = 1:size(dim2,2)
-    POW(d1,d2)  = mean(CSD(d1,d2,find(frqsim >= 40)));    
+    POW(d1,d2)  = mean(CSD(d1,d2,find(frqsim >= 25)));    
 end
 end
 subplot(2,1,1)
@@ -272,4 +278,28 @@ scatter(Tsc(:,1), Hsc(:,1), 80, cols, 'filled')
 xlabel('T component');
 ylabel('H component');
 
+
+
+%% Plot individual fish predictions of parameter changes over time
+%--------------------------------------------------------------------------
+for d1 = 1:length(Tsc(:,1))
+    Ti(d1) = nearest(grad1, Tsc(d1,1));   % T dimension
+end
+
+for d2 = 1:length(Hsc(:,1))
+    Hi(d2) = nearest(grad2, Hsc(d2,1));   % T dimension
+end
+
+ss = 1:floor(length(Ti) / 3);     % indices for single subject
+for s = 1:3
+subplot(1,3,s)
+    Tplot = Ti(ss + (s-1)*ss(end));
+    Hplot = Hi(ss + (s-1)*ss(end));
+    for t = 1:length(Tplot)
+        csd     = squeeze(log(CSD(Tplot(t), Hplot(t), :)));
+        plot(csd, 'color', cols(t,:)); hold on
+    end
+    ylim([-5 1]);
+end
+    
 

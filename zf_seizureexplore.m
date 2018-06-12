@@ -66,14 +66,17 @@ end
 % Plot spectral changes before and during seizure
 %==========================================================================
 % if plotting, 
+alft(scount,:,:) = mean(log(fullt),3);
+    
+figure(scount)
+
 cs = flip(cbrewer('div', 'RdGy', 100));
 colormap(cs);
-    
 frq_axis = linspace(1, Fs, fstps / 2);
 set(gcf, 'Color', 'w');
 
 subplot(3,3,1:6)
-    imagesc(log(squeeze(fullt(:,:,1)))'); hold on
+    imagesc(mean(log(fullt),3)', [0 14]); hold on
     title('Log frequency-power over time', 'fontsize', 12, 'fontweight', 'bold');
     set(gca, 'YDir', 'normal');
     seg = floor(size(fullt,1)/6);
@@ -109,6 +112,11 @@ subplot(3,3,9)
     legend(lbl);
     
 end
+
+figure(4) 
+imagesc(squeeze(mean(alft,1))', [4 14]); 
+set(gca, 'Ydir', 'normal');
+colormap(cs);
 
 %% Generate SPM Files
 %==========================================================================
@@ -190,13 +198,13 @@ end
 
 
 end
-
+%%
 cols = flip(cbrewer('div', 'Spectral', 100));
 colormap(cols)
 
-subplot(3,4,1), imagesc(cpow{1}, [0 1]); axis square
-subplot(3,4,5), imagesc(cpow{2}, [0 1]); axis square
-subplot(3,4,9), imagesc(cpow{3}, [0 1]); axis square
+subplot(3,4,1), imagesc(cpow{1}); axis square
+subplot(3,4,5), imagesc(cpow{2}); axis square
+subplot(3,4,9), imagesc(cpow{3}); axis square
 
 mcpow = zeros(size(cpow{1},1), size(cpow{1},2));
 for cc = 1:length(cpow), mcpow = mcpow + cpow{cc}; end

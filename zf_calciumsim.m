@@ -123,7 +123,7 @@ N     = 10/U.dt;
 M.p   = 8;
 M.dt  = U.dt;
 
-%%
+
 clear nsd noise timsr convr
 for t = 1:length(sP)
     
@@ -366,6 +366,7 @@ tftc = abs(fft(dscal)); fl = ceil(length(tftc)/2);
 tftc = tftc(1:fl);
 ftc  = zeros(1,length(ftl));
 ftc(1:length(tftc)) = tftc;
+ftc     = ftc(1:length(ftl));
 
 subplot(3,1,1), plot(fraxis, log(ftl));  xlim([0 20]);
 subplot(3,1,2), plot(fraxis, log(ftc));  xlim([0 20]);
