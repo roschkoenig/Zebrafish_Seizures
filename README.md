@@ -1,5 +1,5 @@
 # Analysing light-sheet imaging data of acute epileptic seizures in zebrafish 
-_Code accompanying: Rosch et al (2018): Calcium-imaging and dynamic causal modelling reveal brain-wide changes in effective connectivity and synaptic dynamics during epileptic seizures. Accepted at PLoS Computational Biology_
+_Code accompanying: Rosch et al (2018): Calcium imaging and dynamic causal modelling reveal brain-wide changes in effective connectivity and synaptic dynamics during epileptic seizures. Accepted at PLoS Computational Biology_
 
 _[You can find an interactive poster presentation of this analysis here](https://roschkoenig.github.io/SfN17/)_
 
