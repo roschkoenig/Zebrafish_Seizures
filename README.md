@@ -94,8 +94,8 @@ This is illustrated in the paper using a single brain region as an example: For 
 
 
 ## Edits of corse SPM function called by the routines above
-- ``zf_spm_dcm_csd_data``
-- ``zf_spm_dcm_csd``
-- ``zf_spm_dcm_fit``
-- ``zf_spm_fs_csd``
-- ``zf_spm_rand_power_law``
+- ``zf_spm_dcm_csd_data`` - adapted to allow for smaller frequency bins (standard limit: 1Hz)
+- ``zf_spm_dcm_csd`` - adapted to call `zf_spm_dcm_csd` 
+- ``zf_spm_dcm_fit`` - adapted to call `zf_spm_dcm_csd`
+- ``zf_spm_fs_csd`` - adapted to use log-scale of cross spectral densities
+- ``zf_spm_rand_power_law`` - use additional scheme to generate random power law dynamics
