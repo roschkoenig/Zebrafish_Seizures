@@ -13,10 +13,10 @@ The code runs on [Matlab](https://uk.mathworks.com/products/matlab.html) (tested
 The analysis is done by way of a number of custom routines, that in conjunction can be used to reproduce the findings from the paper. Below is a summary of what each of the routines does. Broadly, the code is trying to accomplish the following 5 objectives
 
 1. Identify induced [network-wide changes](#visualise-sensor-space-changes-of-neuronal-dynamics-using-a-sliding-window) in neuronal activity at 'sensor space' - i.e. directly from the meausured signals
-2. Use simulations to test whether DCM can resurrect neuronal parameters from calcium imaging signals
+2. Use simulations to test whether DCM can resurrect neuronal parameters from [calcium imaging](#simulate-dynamic-causal-modelling-on-the-calcium-dynamics) signals
 3. Use [DCM](#set-up-and-invert-baseline-dcm) and [Bayesian model comparison](#use-bayesian-model-reduction-to-make-inference-on-model-architecture-at-baseline) to identify a parsimonious baseline network architecture
 4. Use a [time-windowed](#set-up-sliding-window-files-for-dcm-analysis), hierarchical DCM to identify slow changes in neuronal parameters induced by the induced seizures 
-5. Simulate the effects of the identified parameter changes to identify their effects on the network
+5. [Simulate](#simulate-neuronal-responses-across-parameter-space) the effects of the identified parameter changes to identify their effects on the network
 
 ### Visualise sensor space changes of neuronal dynamics using a sliding window
 ``zf_seizureexplore``
@@ -83,7 +83,15 @@ As we are interested in the changes of DCM parameters over time (i.e. between-DC
 
 Specifically in this instance the code will first load the DCMs that were inverted at the previous step. It will then define the types of between-DCM effects that we are looking for in terms of a second level design matrix in the variable `X`. For the purposes of this analysis, individual fish are treated as repeat measurements. We can visualise the design matrix by typing in `imagesc(X)` and should get the following outpout, where each row is a DCM / time window, and each column is an experimental effect or regressor. 
 
+![Second level model](http://gdurl.com/QZ4p)
+
 Similarly to the Bayesian model reduction performed above to identify a simpler baseline architecture, we can then use a similar approach define a set of models to compare at this (second) level - i.e. which of the model parameters are affected by the changes observed during seizure activity. We can then performe Bayesian model comparison between these reduced models, and plot the second level parameter estimates. 
+
+extrinsic parameters | intrinsic parameters
+ --- | ---
+![Bayesian model selection: extrinsics](http://gdurl.com/zW8Ue) | ![Bayesian model selection: intrinsics](http://gdurl.com/WeuG)
+
+![Parameter estimates](http://gdurl.com/qu45)
 
 ### Simulate neuronal responses across parameter space
 `zf_simulate`
@@ -92,6 +100,7 @@ Once we have identified a simple representation of consistent parameter changes 
 
 This is illustrated in the paper using a single brain region as an example: For this we first use a low-dimensional representation of the data (through a principal component analysis of the windowed parameter estimates) and project each time window onto this low-dimensional representation. Having mapped out the space of the maximum variance, we can then simulate output spectra at each point, plotting the landscape of low-frequency power, but also high frequency power components not orignally included in the data (as this is a simulation). 
 
+![Parameter map](http://gdurl.com/YKmB)
 
 ## Edits of corse SPM function called by the routines above
 - ``zf_spm_dcm_csd_data`` - adapted to allow for smaller frequency bins (standard limit: 1Hz)
