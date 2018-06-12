@@ -1,6 +1,8 @@
 # Analysing light-sheet imaging data of acute epileptic seizures in zebrafish 
 _Code accompanying: Rosch et al (2018): Calcium-imaging and dynamic causal modelling reveal brain-wide changes in effective connectivity and synaptic dynamics during epileptic seizures. Accepted at PLoS Computational Biology_
 
+_[You can find an interactive poster presentation of this analysis here](https://roschkoenig.github.io/SfN17/)_
+
 This repository contains all code required to reproduce the dynamic causal modelling analysis of zebrafish light sheet imaging recordings during acutely induced epileptic seizures. Data together with the code are available through an OSF (open science framework) repository online. 
 
 The code runs on [Matlab](https://uk.mathworks.com/products/matlab.html) (tested with 2016b), which unfortunately is not free, but often available through institutional subscriptions. The code also requires the following freely available software packages to run:
