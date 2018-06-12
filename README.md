@@ -21,6 +21,14 @@ The analysis is done by way of a number of custom routines, that in conjunction 
 ### Visualise sensor space changes of neuronal dynamics using a sliding window
 ``zf_seizureexplore``
 
+This code performs a sliding window analysis of the regionally averaged light sheet microscopy data. The code will look for the original data files (stored in 'Data' in the repository, and called something like this `single_plane_ROI_MEAN_TRACES.mat`). The code will then take 60s time windows in 10s steps to estimate time changing fourier spectra of the calcium signal and plot these (if specified). This function is also used to generate the SPM files (called MEEG objects) that will be required for the later analysis and are stored in the 'Matlab Files' folder. 
+
+![Windowed spectral estimates](http://gdurl.com/2Dnf)
+
+The windowed spectral estimates are also used to estimate a power dynamics correlation matrix (see discussion of the methods in [Rosch et al. 2018 Network Neuroscience, 2(1)](https://doi.org/10.1162/NETN_a_00026)) - for which the average across all fish is plotted as output, also seen in Figure 2 in the [bioRxiv preprint](https://doi.org/10.1101/160259). This matrix shows the correlation of each time window's channel-resolved frequency-power spectra with each other time window. The leading diagonal of the matrix is therefore always = 1 (i.e. fully correlated), and time periods where the overall output remains relatively static appear as blocks on the dynamics matrix. The function's output is shown below. 
+
+![Power dynamics time by time correlation matrix](http://gdurl.com/J_Vn)
+
 ### Simulate dynamic causal modelling on the calcium dynamics 
 ``zf_calciumsim``
 
