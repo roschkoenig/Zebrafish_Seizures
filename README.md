@@ -14,7 +14,7 @@ The analysis is done by way of a number of custom routines, that in conjunction 
 
 1. Identify induced [network-wide changes](#visualise-sensor-space-changes-of-neuronal-dynamics-using-a-sliding-window) in neuronal activity at 'sensor space' - i.e. directly from the meausured signals
 2. Use simulations to test whether DCM can resurrect neuronal parameters from calcium imaging signals
-3. Use DCM and Bayesian model comparison to identify a parsimonious baseline network architecture
+3. Use [DCM](#set-up-and-invert-baseline-dcm) and [Bayesian model comparison](use-bayesian-model-reduction-to-make-inference-on-model-architecture-at-baseline) to identify a parsimonious baseline network architecture
 4. Use a hierarchical DCM to identify slow changes in neuronal parameters induced by the induced seizures 
 5. Simulate the effects of the identified parameter changes to identify their effects on the network
 
@@ -47,12 +47,29 @@ These are then used as the basis to estimate the underlying neuronal parameter c
 ![Bayesian model comparison and posterior parameter estimates](http://gdurl.com/voEb)
 
 ### Set up and invert baseline DCM 
+*This will take a while to run*
 ``zf_dcm``
+
+In the next step, we are using DCM to infer the model architecture that best explains the cross spectral density summaries of baseline network activity. For the DCM we are loading the baseline data for each animal, and setting up the model architecture and inversion parameters. 
+
+```matlab 
+DCM.options.analysis = 'CSD';       % cross-spectral density
+DCM.options.model    = 'LFP';      	% three-population model
+DCM.options.spatial  = 'LFP';       % virtual electrode input
+```
+This section defines the basic features of the model inversion - here we are analysing ongoing neuronal oscillatory activity using cross-spectral densities (CSD). We are assuming a basic structure that is currently described as the 'LFP' model - a three population summary of microcircuitry, consisting of a single main (excitatory) output population, and one inhibitory and one excitatory interneuronal population respectively. This is all analysed, treating the signal as direct neuronal recordings (i.e. a local field potential - LFP - spatial model).
+
+The model space that is of interest here revolves around the 'A' matrix - i.e. the synaptic coupling between different neuronal sources. This is specified in `zf_modelspace`. Briefly, this designs a 2 by 2 by 6 model space defined by the presence or absence of forward/backward connectivity along the hierarchy; homologous connections between brain hemispheres; and additional extensive connections to and from a specified 'hub' region. At this stage, the full model is selected and used for inversion. 
 
 ### Use Bayesian model reduction to make inference on model architecture at baseline
 ``zf_bmr``
 
-### Set up (sliding window) files for DCM analysis 
+Based on the full model inversion for the baseline model performed at the preceding step, this function now fills in the remainder of the parameter estimates and approximated model evidence across the model space, using Bayesian model reduction, or BMR. This routine will set up a new DCM structure for each of the investigated models, then load the already inverted full DCM from the step above. Using the free energy approximation for the model evidence, this will then allow Bayesian model comparison, which the code will present as family-wise comparison as shown below. 
+
+![Bayesian model reduction and comparison output](http://gdurl.com/Qc4d)
+
+### Set up (sliding window) files for DCM analysis
+*This takes a very long time to run, and will need setting up within your local infrastructure*
 ``zf_slide`` and ``zf_slide_for_cluster`` 
 
 
