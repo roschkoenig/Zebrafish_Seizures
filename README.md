@@ -14,8 +14,8 @@ The analysis is done by way of a number of custom routines, that in conjunction 
 
 1. Identify induced [network-wide changes](#visualise-sensor-space-changes-of-neuronal-dynamics-using-a-sliding-window) in neuronal activity at 'sensor space' - i.e. directly from the meausured signals
 2. Use simulations to test whether DCM can resurrect neuronal parameters from calcium imaging signals
-3. Use [DCM](#set-up-and-invert-baseline-dcm) and [Bayesian model comparison](use-bayesian-model-reduction-to-make-inference-on-model-architecture-at-baseline) to identify a parsimonious baseline network architecture
-4. Use a hierarchical DCM to identify slow changes in neuronal parameters induced by the induced seizures 
+3. Use [DCM](#set-up-and-invert-baseline-dcm) and [Bayesian model comparison](#use-bayesian-model-reduction-to-make-inference-on-model-architecture-at-baseline) to identify a parsimonious baseline network architecture
+4. Use a [time-windowed](#set-up-sliding-window-files-for-dcm-analysis), hierarchical DCM to identify slow changes in neuronal parameters induced by the induced seizures 
 5. Simulate the effects of the identified parameter changes to identify their effects on the network
 
 ### Visualise sensor space changes of neuronal dynamics using a sliding window
@@ -72,11 +72,26 @@ Based on the full model inversion for the baseline model performed at the preced
 *This takes a very long time to run, and will need setting up within your local infrastructure*
 ``zf_slide`` and ``zf_slide_for_cluster`` 
 
+Based on the winning model architecture selected from the baseline model inversion performed in the previous two steps, we now invert DCMs for each individual time step separately - the idea here is that over short time period (i.e. 60s), a network of neural mass models is fitted to an assumed stationary oscillatory signal. By doing this with overlappying windows separatey by only short time steps, we will be able to track the slow parameter changes that underlie the transition between different neuronal states - such as here, the baseline and the induced seizure state. 
+
+The `zf_slide` version of the code will specify the model for each time window and invert them in a single loop (over many days). The `zf_slide` version will specify the DCM structure needed for inversion, but not actually invert the DCMs. This will need to be done on a computing cluster with matlab installed, where a custom inversion function (`zf_spm_dcm_fit`) should be called. 
 
 ### Use parametric empirical Bayes to make inference across time windows
 ``zf_peb``
 
-### 
+As we are interested in the changes of DCM parameters over time (i.e. between-DCM parameter changes), we can use parametric empirical Bayes (PEB) to specifically estimate between DCM effects that correspond to particular trajectories. For PEB we will specify a model space at the second (between-DCM) level that describes possible trajectories, and in the inversion we will identify the most parsimonious combination of effects of this second-level general linear model on DCM parameters to explain the data. 
+
+Specifically in this instance the code will first load the DCMs that were inverted at the previous step. It will then define the types of between-DCM effects that we are looking for in terms of a second level design matrix in the variable `X`. For the purposes of this analysis, individual fish are treated as repeat measurements. We can visualise the design matrix by typing in `imagesc(X)` and should get the following outpout, where each row is a DCM / time window, and each column is an experimental effect or regressor. 
+
+Similarly to the Bayesian model reduction performed above to identify a simpler baseline architecture, we can then use a similar approach define a set of models to compare at this (second) level - i.e. which of the model parameters are affected by the changes observed during seizure activity. We can then performe Bayesian model comparison between these reduced models, and plot the second level parameter estimates. 
+
+### Simulate neuronal responses across parameter space
+`zf_simulate`
+
+Once we have identified a simple representation of consistent parameter changes across fish and time windows, we want to explore what effect those specific parameters have on the neuronal output. Because the DCM / PEB approach yields fully generative models that will produce predictions of neuronal oscillatory activty (in the shape of cross-spectral densities), we can simulate the effects of specific parameter changes.
+
+This is illustrated in the paper using a single brain region as an example: For this we first use a low-dimensional representation of the data (through a principal component analysis of the windowed parameter estimates) and project each time window onto this low-dimensional representation. Having mapped out the space of the maximum variance, we can then simulate output spectra at each point, plotting the landscape of low-frequency power, but also high frequency power components not orignally included in the data (as this is a simulation). 
+
 
 ## Edits of corse SPM function called by the routines above
 - ``zf_spm_dcm_csd_data``
